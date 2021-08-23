@@ -44,6 +44,11 @@ final class SymfonyActionRequestHandler implements RequestHandlerInterface
     {
         $symfonyRequest->attributes->replace($psrRequest->getAttributes());
         $symfonyRequest->headers->replace($psrRequest->getHeaders());
+        $symfonyRequest->query->replace($psrRequest->getQueryParams());
+
+        if (\is_array($parsedBody = $psrRequest->getParsedBody())) {
+            $symfonyRequest->request->replace($parsedBody);
+        }
 
         return $symfonyRequest;
     }
