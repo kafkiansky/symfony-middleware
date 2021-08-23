@@ -79,7 +79,7 @@ final class CacheAttributesReader implements AttributeReader
         $normalized = [];
 
         foreach ($middlewares as $middleware) {
-            $normalized[] = $middleware->list;
+            $normalized[] = $middleware->toArray();
         }
 
         return $normalized;
