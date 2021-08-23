@@ -1,0 +1,42 @@
+{
+    "name": "kafkiansky/symfony-middleware",
+    "description": "Middleware for symfony.",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Kafkiansky\\SymfonyMiddleware\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kafkiansky\\SymfonyMiddleware\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "symfony/dependency-injection": "^5.3",
+        "symfony/event-dispatcher": "^5.3",
+        "symfony/http-kernel": "^5.3",
+        "symfony/config": "^5.3",
+        "symfony/http-foundation": "^5.3",
+        "psr/http-server-middleware": "^1.0",
+        "psr/http-server-handler": "^1.0",
+        "symfony/psr-http-message-bridge": "^2.1",
+        "nyholm/psr7": "^1.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "vimeo/psalm": "^4.9"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "v.zanfir",
+            "email": "vadimzanfir@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "scripts": {
+        "lint": "./vendor/bin/psalm --no-cache",
+        "test": "./vendor/bin/phpunit"
+    }
+}

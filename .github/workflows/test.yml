@@ -1,0 +1,53 @@
+name: test
+
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: true
+            matrix:
+                php: [8.0]
+                stability: [prefer-lowest, prefer-stable]
+
+        name: PHP ${{ matrix.php }} / ${{ matrix.stability }}
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v1
+
+            - name: Cache dependencies
+              uses: actions/cache@v1
+              with:
+                  path: ~/.composer/cache/files
+                  key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  extension-csv: mbstring, xdebug
+                  coverage: xdebug
+
+            - name: Install dependencies
+              run: composer update --prefer-dist --no-interaction --no-suggest
+
+            - name: Validate composer.json
+              run: composer validate
+
+            - name: Execute tests
+              run: composer test
+
+            - name: Upload coverage to Codecov
+              uses: codecov/codecov-action@v1
+              with:
+                  token: ${{ secrets.CODECOV_TOKEN }}
+                  file: ./coverage.xml
