@@ -26,4 +26,22 @@ final class Middleware
     {
         $this->list = $list;
     }
+
+    /**
+     * @return class-string<MiddlewareInterface>[]|string[]
+     */
+    public function toArray(): array
+    {
+        return $this->list;
+    }
+
+    /**
+     * @param class-string<MiddlewareInterface>[]|string[] $list
+     *
+     * @return Middleware
+     */
+    public static function fromArray(array $list): Middleware
+    {
+        return new Middleware($list);
+    }
 }

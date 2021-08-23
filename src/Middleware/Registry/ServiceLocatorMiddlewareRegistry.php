@@ -36,7 +36,7 @@ final class ServiceLocatorMiddlewareRegistry implements MiddlewareRegistry
     public function byName(string $middlewareFqcnOrGroup): array
     {
         if ($this->container->has($middlewareFqcnOrGroup) === false && !isset($this->groups[$middlewareFqcnOrGroup])) {
-            throw new MiddlewareNotConfigured($middlewareFqcnOrGroup);
+            throw MiddlewareNotConfigured::forMiddleware($middlewareFqcnOrGroup);
         }
 
         if ($this->container->has($middlewareFqcnOrGroup)) {
@@ -51,7 +51,9 @@ final class ServiceLocatorMiddlewareRegistry implements MiddlewareRegistry
             $middlewares = array_map(function (string $middlewareFqcn): MiddlewareInterface {
                 /** @var MiddlewareInterface */
                 return $this->container->get($middlewareFqcn);
-            }, $this->groups[$middlewareFqcnOrGroup]['middlewares']);
+            }, $this->groups[$middlewareFqcnOrGroup]['middlewares']
+                ?? throw MiddlewareNotConfigured::becauseGroupIsEmpty($middlewareFqcnOrGroup)
+            );
         }
 
         return $middlewares;

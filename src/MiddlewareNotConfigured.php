@@ -9,18 +9,23 @@ use Throwable;
 
 final class MiddlewareNotConfigured extends \Exception
 {
-    public function __construct(string $middlewareName, int $code = 0, Throwable $previous = null)
+    public static function forMiddleware(string $middlewareNameOrGroup): MiddlewareNotConfigured
     {
-        parent::__construct(
+        return new MiddlewareNotConfigured(
             vsprintf(
                 'The middleware or group "%s" was not configured. Make sure it implements the "%s" interface or group is defined.',
                 [
-                    $middlewareName,
+                    $middlewareNameOrGroup,
                     MiddlewareInterface::class,
                 ]
-            ),
-            $code,
-            $previous
+            )
+        );
+    }
+
+    public static function becauseGroupIsEmpty(string $groupName): MiddlewareNotConfigured
+    {
+        return new MiddlewareNotConfigured(
+            sprintf('Middlewares groups cannot empty, but the group "%s" is.', $groupName)
         );
     }
 }

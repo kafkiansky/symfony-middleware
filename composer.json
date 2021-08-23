@@ -21,7 +21,8 @@
         "psr/http-server-middleware": "^1.0",
         "psr/http-server-handler": "^1.0",
         "symfony/psr-http-message-bridge": "^2.1",
-        "nyholm/psr7": "^1.4"
+        "nyholm/psr7": "^1.4",
+        "symfony/cache": "^5.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
@@ -37,6 +38,6 @@
     "minimum-stability": "stable",
     "scripts": {
         "lint": "./vendor/bin/psalm --no-cache",
-        "test": "./vendor/bin/phpunit"
+        "test": "./vendor/bin/phpunit --do-not-cache-result"
     }
 }

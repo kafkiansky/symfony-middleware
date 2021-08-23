@@ -4,32 +4,31 @@ declare(strict_types=1);
 
 namespace Kafkiansky\SymfonyMiddleware\Attribute\Reader;
 
+use Kafkiansky\SymfonyMiddleware\Attribute\Middleware;
+
 final class ClassMethodAttributeReader implements AttributeReader
 {
     /**
-     * @template T of object
-     *
      * @param object $class
-     * @param class-string<T> $attributeName
      * @param string|null $method
      *
      * @throws \ReflectionException
      *
-     * @return T[]
+     * @return Middleware[]
      */
-    public function read(object $class, string $attributeName, ?string $method = null): array
+    public function read(object $class, ?string $method = null): array
     {
-        $attributes = (new \ReflectionClass($class))->getAttributes($attributeName);
+        $attributes = (new \ReflectionClass($class))->getAttributes(AttributeReader::ATTRIBUTE);
 
         if ($method !== null) {
             $attributes = array_merge(
                 $attributes,
-                (new \ReflectionMethod($class, $method))->getAttributes($attributeName)
+                (new \ReflectionMethod($class, $method))->getAttributes(AttributeReader::ATTRIBUTE)
             );
         }
 
         return array_map(static function (\ReflectionAttribute $attribute): object {
-            /** @var T */
+            /** @var Middleware */
             return $attribute->newInstance();
         }, $attributes);
     }

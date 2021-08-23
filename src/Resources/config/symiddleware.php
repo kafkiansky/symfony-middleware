@@ -8,10 +8,21 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services();
 
-    $services->set(
-        Kafkiansky\SymfonyMiddleware\Attribute\Reader\ClassMethodAttributeReader::class,
-        Kafkiansky\SymfonyMiddleware\Attribute\Reader\ClassMethodAttributeReader::class
-    );
+    $services
+        ->set(
+            Kafkiansky\SymfonyMiddleware\Attribute\Reader\ClassMethodAttributeReader::class,
+            Kafkiansky\SymfonyMiddleware\Attribute\Reader\ClassMethodAttributeReader::class
+        );
+
+    $services
+        ->set(
+            Kafkiansky\SymfonyMiddleware\Attribute\Reader\AttributeReader::class,
+            Kafkiansky\SymfonyMiddleware\Attribute\Reader\CacheAttributesReader::class,
+        )
+        ->args([
+            service(Psr\Cache\CacheItemPoolInterface::class),
+            service(Kafkiansky\SymfonyMiddleware\Attribute\Reader\ClassMethodAttributeReader::class),
+        ]);
 
     $services
         ->set(
@@ -52,16 +63,35 @@ return static function (ContainerConfigurator $configurator): void {
             service(Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface::class),
         ]);
 
-    $services->set(Kafkiansky\SymfonyMiddleware\ReplaceController::class)
+    $services
+        ->set(
+            Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareGatherer::class,
+            Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareGatherer::class
+        )
+        ->args([
+            service(Kafkiansky\SymfonyMiddleware\Middleware\Registry\MiddlewareRegistry::class),
+        ])
+    ;
+
+    $services
+        ->set(
+            Kafkiansky\SymfonyMiddleware\Integration\ControllerReplacer::class,
+            Kafkiansky\SymfonyMiddleware\Integration\ControllerReplacer::class,
+        )
+        ->args([
+            service(Kafkiansky\SymfonyMiddleware\Psr\PsrRequestTransformer::class),
+            service(Kafkiansky\SymfonyMiddleware\Psr\PsrResponseTransformer::class),
+        ]);
+
+    $services->set(Kafkiansky\SymfonyMiddleware\ControllerListener::class)
         ->tag('kernel.event_listener', [
             'event' => Symfony\Component\HttpKernel\KernelEvents::CONTROLLER_ARGUMENTS,
             'method' => 'onControllerArguments',
         ])
         ->args([
-            service(Kafkiansky\SymfonyMiddleware\Middleware\Registry\MiddlewareRegistry::class),
-            service(Kafkiansky\SymfonyMiddleware\Attribute\Reader\ClassMethodAttributeReader::class),
-            service(Kafkiansky\SymfonyMiddleware\Psr\PsrRequestTransformer::class),
-            service(Kafkiansky\SymfonyMiddleware\Psr\PsrResponseTransformer::class),
+            service(Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareGatherer::class),
+            service(Kafkiansky\SymfonyMiddleware\Attribute\Reader\AttributeReader::class),
+            service(Kafkiansky\SymfonyMiddleware\Integration\ControllerReplacer::class),
         ])
     ;
 };

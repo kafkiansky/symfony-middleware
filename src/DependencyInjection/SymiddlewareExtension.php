@@ -30,12 +30,12 @@ final class SymiddlewareExtension extends Extension
             return;
         }
 
-        /** @var array{groups: array{global?: array, groups?: array}} $config */
+        /** @var array{groups: array<string, array{if?: string}>} $config */
         $config = $this->processConfiguration($configuration, $configs);
 
         if (isset($config['global'])) {
             $config['groups']['global'] = [
-                'if' => true,
+                'if' => true, // global middleware should run always.
                 'middlewares' => $config['global'],
             ];
 
