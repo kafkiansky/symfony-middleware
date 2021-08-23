@@ -54,7 +54,7 @@ final class SomeController
 If you want to use the list of middlewares, you can define middleware group inside `symfony_middleware.yaml` configuration file:
 
 ```yaml
-middlewares:
+symiddleware:
   groups:
     debug:
       if: '%env(RUN_DEBUG_MIDDLEWARE)%'
@@ -85,7 +85,7 @@ If false, this middleware will not be executed.
 If you want to run the list of middleware every request, you need the `global` middleware section. This keyword is reserved and `if` parameter is not supported.
 
 ```yaml
-middlewares:
+symiddleware:
   global:
       - App\Controller\SetCorsHeaders
   groups:
