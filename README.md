@@ -10,6 +10,7 @@
 ### Contents
 
 - [Installation](#installation)
+- [Configuration](#configuration)
 - [Usage](#usage)
 - [Examples](#examples)
 - [Customization](#customization)
@@ -23,6 +24,22 @@
 
 ```bash
 composer require kafkiansky/symfony-middleware
+```
+
+## Configuration
+
+Ensure you have added bundle in `config/bundles.php`:
+
+```php
+Kafkiansky\SymfonyMiddleware\SymiddlewareBundle::class => ['all' => true],
+```
+
+Create the configuration file in `packages/symmidleware.yaml`:
+
+```yaml
+symiddleware:
+  global:
+    ##
 ```
 
 ## Usage
