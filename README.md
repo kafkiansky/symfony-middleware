@@ -14,6 +14,7 @@
 - [Examples](#examples)
 - [Customization](#customization)
 - [Caching](#caching)
+- [Real World Example](#real-world-example)
 - [Testing](#testing)
 - [License](#license)
 
@@ -237,6 +238,88 @@ Package use caching on production environment to prevent reflection usage. First
 it's going to use the `kernel.environment` definition and will cache attributes when it set to `prod`.
 
 Package will cache all controllers even if it doesn't found the attributes for it. This approach will allow to remember all the controllers and not use reflection further.
+
+## Real World Example
+
+Imagine that you have some endpoints which requires authorization access via basic. Write middleware:
+
+```yaml
+# services.yaml
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+        bind:
+            $basicUser: 'root'
+            $basicPassword: 'secret'
+```
+
+```php
+// Authorization Middleware
+
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Nyholm\Psr7\Response;
+
+final class AuthorizeRequests implements MiddlewareInterface
+{
+    private string $basicUser;
+    private string $basicPassword;
+
+    public function __construct(string $basicUser, string $basicPassword)
+    {
+        $this->basicUser = $basicUser;
+        $this->basicPassword = $basicPassword;
+    }
+
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        $user = $request->getServerParams()['PHP_AUTH_USER'] ?? null;
+        $passwd = $request->getServerParams()['PHP_AUTH_PW'] ?? null;
+
+        if ($user === $this->basicUser && $passwd === $this->basicPassword) {
+            return $handler->handle($request);
+        }
+
+        return new Response(401, [
+            'WWW-Authenticate' => 'Basic realm="Backend"'
+        ]);
+    }
+}
+```
+
+```yaml
+# example configuration
+symiddleware:
+  groups:
+    basic:
+      middlewares:
+        - App\Middleware\AuthorizeRequests
+```
+
+```php
+// Some controller
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Kafkiansky\SymfonyMiddleware\Attribute\Middleware;
+
+final class SomeController
+{
+    #[Middleware(['basic'])] // via middleware group
+    public function writeArticle(): JsonResponse
+    {
+    }
+
+    #[Middleware([App\Middleware\AuthorizeRequests::class])] // via concrete class
+    public function deleteArticle(): JsonResponse
+    {
+    }
+}
+```
 
 ## Testing
 
