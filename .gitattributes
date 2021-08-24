@@ -1,3 +1,4 @@
+.editorconfig      export-ignore
 .github            export-ignore
 .gitattributes     export-ignore
 .gitignore         export-ignore
@@ -6,3 +7,4 @@ tests              export-ignore
 phpunit.xml        export-ignore
 psalm.xml          export-ignore
 LICENSE.md         export-ignpore
+.scrutinizer.yml   export-ignore

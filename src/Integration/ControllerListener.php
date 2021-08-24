@@ -42,9 +42,9 @@ final class ControllerListener
 
         $attributes = $this->reader->read($controller, $method);
 
-        if (count($attributes) > 0) {
-            $middlewares = $this->middlewareGatherer->gather($attributes);
+        $middlewares = $this->middlewareGatherer->gather($attributes);
 
+        if (count($middlewares) > 0) {
             /** @psalm-var callable(): Response $originalController */
             $originalController = $event->getController();
 

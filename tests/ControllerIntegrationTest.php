@@ -9,6 +9,7 @@ use Kafkiansky\SymfonyMiddleware\Integration\ControllerReplacer;
 use Kafkiansky\SymfonyMiddleware\Tests\stubs\AnotherModifyRequestMiddleware;
 use Kafkiansky\SymfonyMiddleware\Tests\stubs\CopyAttributesFromRequest;
 use Kafkiansky\SymfonyMiddleware\Tests\stubs\EarlyReturnMiddleware;
+use Kafkiansky\SymfonyMiddleware\Tests\stubs\EmptyIntegrationController;
 use Kafkiansky\SymfonyMiddleware\Tests\stubs\IntegrationController;
 use Kafkiansky\SymfonyMiddleware\Tests\stubs\ModifyRequestMiddleware;
 use Kafkiansky\SymfonyMiddleware\Tests\stubs\ModifyResponseMiddleware;
@@ -144,5 +145,74 @@ final class ControllerIntegrationTest extends TestCase
             ],
             json_decode($response->getContent(), true)['attributes']
         );
+    }
+
+    public function testThatJustGlobalMiddlewareCanExecuted(): void
+    {
+        $request = Request::create('/', 'POST');
+
+        $event = new ControllerArgumentsEvent(
+            $this->createMock(HttpKernelInterface::class),
+            [new EmptyIntegrationController(), 'method1'],
+            [$request],
+            $request,
+            HttpKernelInterface::MAIN_REQUEST,
+        );
+
+        $controllerListener = new ControllerListener(
+            $this->createMiddlewareGatherer([
+                CopyAttributesFromRequest::class => new CopyAttributesFromRequest(),
+                ModifyRequestMiddleware::class => new ModifyRequestMiddleware(),
+            ], [
+                'global' => ['middlewares' => [ModifyRequestMiddleware::class]],
+            ]),
+            $this->createAttributeReader(),
+            new ControllerReplacer(
+                $this->createPsrRequestTransformer(),
+                $this->createPsrResponseTransformer(),
+                $this->createPsrRequestCloner()
+            ),
+        );
+
+        $controllerListener->onControllerArguments($event);
+
+        $controller = $event->getController();
+
+        /** @var Response $response */
+        $response = $controller();
+
+        self::assertEquals([ModifyRequestMiddleware::class => 'handled'], json_decode($response->getContent(), true)['attributes']);
+    }
+
+    public function testControllerWasNotChangeBecauseNoMiddlewareWasFound(): void
+    {
+        $request = Request::create('/', 'POST');
+
+        $event = new ControllerArgumentsEvent(
+            $this->createMock(HttpKernelInterface::class),
+            [new EmptyIntegrationController(), 'method1'],
+            [$request],
+            $request,
+            HttpKernelInterface::MAIN_REQUEST,
+        );
+
+        $controllerListener = new ControllerListener(
+            $this->createMiddlewareGatherer(),
+            $this->createAttributeReader(),
+            new ControllerReplacer(
+                $this->createPsrRequestTransformer(),
+                $this->createPsrResponseTransformer(),
+                $this->createPsrRequestCloner()
+            ),
+        );
+
+        $controllerListener->onControllerArguments($event);
+
+        $controller = $event->getController();
+
+        /** @var Response $response */
+        $response = $controller($request); // proof that controller was not changed.
+
+        self::assertEmpty(json_decode($response->getContent(), true)['attributes']);
     }
 }
