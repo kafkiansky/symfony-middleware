@@ -42,11 +42,9 @@ final class CacheAttributesReader implements AttributeReader
         } else {
             $middlewares = $this->delegate->read($class, $method);
 
-            if (count($middlewares) > 0) {
-                $item->set($this->normalizeToCache($middlewares));
+            $item->set($this->normalizeToCache($middlewares));
 
-                $this->cache->save($item);
-            }
+            $this->cache->save($item);
         }
 
         return $middlewares;

@@ -33,14 +33,12 @@ final class SymiddlewareExtension extends Extension
         /** @var array{groups: array<string, array{if?: string}>} $config */
         $config = $this->processConfiguration($configuration, $configs);
 
-        if (isset($config['global'])) {
-            $config['groups']['global'] = [
-                'if' => true, // global middleware should run always.
-                'middlewares' => $config['global'],
-            ];
+        $config['groups']['global'] = [
+            'if' => true, // global middleware should run always.
+            'middlewares' => $config['global'] ?? [],
+        ];
 
-            unset($config['global']);
-        }
+        unset($config['global']);
 
         // We will replace empty service locator in compiler pass when all middlewares will be found.
         $container->setDefinition(

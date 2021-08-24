@@ -8,21 +8,13 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (ContainerConfigurator $configurator): void {
     $services = $configurator->services();
 
-    $services
-        ->set(
-            Kafkiansky\SymfonyMiddleware\Attribute\Reader\ClassMethodAttributeReader::class,
-            Kafkiansky\SymfonyMiddleware\Attribute\Reader\ClassMethodAttributeReader::class
-        );
+    $services->set(Kafkiansky\SymfonyMiddleware\Attribute\Reader\ClassMethodAttributeReader::class);
 
     $services
         ->set(
             Kafkiansky\SymfonyMiddleware\Attribute\Reader\AttributeReader::class,
-            Kafkiansky\SymfonyMiddleware\Attribute\Reader\CacheAttributesReader::class,
-        )
-        ->args([
-            service(Psr\Cache\CacheItemPoolInterface::class),
-            service(Kafkiansky\SymfonyMiddleware\Attribute\Reader\ClassMethodAttributeReader::class),
-        ]);
+            Kafkiansky\SymfonyMiddleware\Attribute\Reader\ClassMethodAttributeReader::class,
+        );
 
     $services
         ->set(

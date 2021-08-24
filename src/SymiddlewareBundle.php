@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kafkiansky\SymfonyMiddleware;
 
+use Kafkiansky\SymfonyMiddleware\DependencyInjection\AttributeReaderCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -17,6 +18,7 @@ final class SymiddlewareBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new SymiddlewareCompilerPass());
+        $container->addCompilerPass(new AttributeReaderCompilerPass());
     }
 
     public function getContainerExtension(): ExtensionInterface
