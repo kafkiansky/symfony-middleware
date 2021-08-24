@@ -229,12 +229,12 @@ Duplicated middlewares will be removed.
 
 PSR middlewares and Symfony has different incompatible Request objects. If your middleware going to change the request object,
 only `attributes`, `query params`, `headers` and `parsed body` will be copied from psr request to symfony request.
-If you wish change this behaviour, you may change the `Kafkiansky\SymfonyMiddleware\Psr\PsrRequestCloner` interface binding it to your realization.
+If you wish to change this behaviour, you may change the `Kafkiansky\SymfonyMiddleware\Psr\PsrRequestCloner` interface binding it to your realization.
 
 ## Caching
 
 Package use caching on production environment to prevent reflection usage. First of all, package will search of the `app.cache_middleware` parameter. If package doesn't find it,
-it's going to use the `kernel.environment` definition and will cache attributes when it set to `true`.
+it's going to use the `kernel.environment` definition and will cache attributes when it set to `prod`.
 
 Package will cache all controllers even if it doesn't found the attributes for it. This approach will allow to remember all the controllers and not use reflection further.
 
