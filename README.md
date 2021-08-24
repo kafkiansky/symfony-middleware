@@ -12,6 +12,7 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Examples](#examples)
+- [Customization](#customization)
 - [Testing](#testing)
 - [License](#license)
 
@@ -103,7 +104,7 @@ symiddleware:
 
 Now the `App\Controller\SetCorsHeaders` middleware will execute on every request.
 
-### Examples
+## Examples
 
 1. Simple middleware that modifies request:
 
@@ -222,6 +223,12 @@ final class SomeController
 ```
 
 Duplicated middlewares will be removed.
+
+## Customization
+
+PSR middlewares and Symfony has different incompatible Request objects. If your middleware going to change the request object,
+only `attributes`, `query params`, `headers` and `parsed body` will be copied from psr request to symfony request.
+If you wish change this behaviour, you may change the `Kafkiansky\SymfonyMiddleware\Psr\PsrRequestCloner` interface binding it to your realization.
 
 ## Testing
 

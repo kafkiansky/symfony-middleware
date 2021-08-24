@@ -1,7 +1,12 @@
 {
     "name": "kafkiansky/symfony-middleware",
-    "description": "Middleware for symfony.",
+    "description": "PSR-15 Middleware for symfony.",
     "type": "library",
+    "keywords": [
+        "symfony",
+        "psr-15",
+        "middleware"
+    ],
     "autoload": {
         "psr-4": {
             "Kafkiansky\\SymfonyMiddleware\\": "src/"
@@ -13,6 +18,7 @@
         }
     },
     "require": {
+        "php": "^8.0",
         "symfony/dependency-injection": "^5.3",
         "symfony/event-dispatcher": "^5.3",
         "symfony/http-kernel": "^5.3",
