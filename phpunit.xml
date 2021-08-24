@@ -19,6 +19,7 @@
             <exclude>
                 <directory suffix=".php">./src/Resources</directory>
                 <directory suffix=".php">./src/DependencyInjection</directory>
+                <file>./src/SymiddlewareBundle.php</file>
             </exclude>
         </whitelist>
     </filter>

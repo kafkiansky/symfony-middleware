@@ -1,7 +1,11 @@
-# PSR-15 middleware now in Symfony.
+# PSR-15 middleware now in Symfony
 
 ![test](https://github.com/kafkiansky/symfony-middleware/workflows/test/badge.svg?event=push)
 [![Codecov](https://codecov.io/gh/kafkiansky/symfony-middleware/branch/master/graph/badge.svg)](https://codecov.io/gh/kafkiansky/symfony-middleware)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Total Downloads](https://img.shields.io/packagist/dt/kafkiansky/symfony-middleware.svg?style=flat-square)](https://packagist.org/packages/kafkiansky/symfony-middleware)
+[![Quality Score](https://img.shields.io/scrutinizer/g/kafkiansky/symfony-middleware.svg?style=flat-square)](https://scrutinizer-ci.com/g/kafkiansky/symfony-middleware)
+
 
 ### Contents
 
