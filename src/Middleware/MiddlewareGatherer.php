@@ -6,7 +6,6 @@ namespace Kafkiansky\SymfonyMiddleware\Middleware;
 
 use Kafkiansky\SymfonyMiddleware\Attribute\Middleware;
 use Kafkiansky\SymfonyMiddleware\Middleware\Registry\MiddlewareRegistry;
-use Kafkiansky\SymfonyMiddleware\MiddlewareNotConfigured;
 use Psr\Http\Server\MiddlewareInterface;
 
 final class MiddlewareGatherer

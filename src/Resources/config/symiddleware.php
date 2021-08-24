@@ -73,6 +73,11 @@ return static function (ContainerConfigurator $configurator): void {
         ])
     ;
 
+    $services->set(
+        Kafkiansky\SymfonyMiddleware\Psr\PsrRequestCloner::class,
+        Kafkiansky\SymfonyMiddleware\Psr\DefaultPsrRequestCloner::class,
+    );
+
     $services
         ->set(
             Kafkiansky\SymfonyMiddleware\Integration\ControllerReplacer::class,
@@ -81,9 +86,10 @@ return static function (ContainerConfigurator $configurator): void {
         ->args([
             service(Kafkiansky\SymfonyMiddleware\Psr\PsrRequestTransformer::class),
             service(Kafkiansky\SymfonyMiddleware\Psr\PsrResponseTransformer::class),
+            service(Kafkiansky\SymfonyMiddleware\Psr\PsrRequestCloner::class),
         ]);
 
-    $services->set(Kafkiansky\SymfonyMiddleware\ControllerListener::class)
+    $services->set(Kafkiansky\SymfonyMiddleware\Integration\ControllerListener::class)
         ->tag('kernel.event_listener', [
             'event' => Symfony\Component\HttpKernel\KernelEvents::CONTROLLER_ARGUMENTS,
             'method' => 'onControllerArguments',

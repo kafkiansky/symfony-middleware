@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kafkiansky\SymfonyMiddleware\Middleware\Registry;
 
 use Psr\Http\Server\MiddlewareInterface;
-use Kafkiansky\SymfonyMiddleware\MiddlewareNotConfigured;
+use Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareNotConfigured;
 
 interface MiddlewareRegistry
 {

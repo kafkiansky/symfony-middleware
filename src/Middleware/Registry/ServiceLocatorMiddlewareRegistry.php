@@ -6,7 +6,7 @@ namespace Kafkiansky\SymfonyMiddleware\Middleware\Registry;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\MiddlewareInterface;
-use Kafkiansky\SymfonyMiddleware\MiddlewareNotConfigured;
+use Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareNotConfigured;
 
 final class ServiceLocatorMiddlewareRegistry implements MiddlewareRegistry
 {

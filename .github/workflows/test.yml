@@ -44,7 +44,7 @@ jobs:
               run: composer validate
 
             - name: Execute tests
-              run: composer test
+              run: vendor/bin/phpunit --coverage-clover coverage.xml
 
             - name: Upload coverage to Codecov
               uses: codecov/codecov-action@v1

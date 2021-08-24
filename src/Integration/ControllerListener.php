@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kafkiansky\SymfonyMiddleware;
+namespace Kafkiansky\SymfonyMiddleware\Integration;
 
 use Kafkiansky\SymfonyMiddleware\Attribute\Reader\AttributeReader;
-use Kafkiansky\SymfonyMiddleware\Integration\ControllerReplacer;
 use Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareGatherer;
+use Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareNotConfigured;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 

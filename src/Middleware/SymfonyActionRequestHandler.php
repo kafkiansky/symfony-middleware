@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kafkiansky\SymfonyMiddleware\Middleware;
 
+use Kafkiansky\SymfonyMiddleware\Psr\PsrRequestCloner;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -19,6 +20,7 @@ final class SymfonyActionRequestHandler implements RequestHandlerInterface
     private $destination;
     private PsrResponseTransformer $psrResponseTransformer;
     private SymfonyRequest $symfonyRequest;
+    private PsrRequestCloner $psrRequestCloner;
 
     /**
      * @param callable(SymfonyRequest): Response $destination
@@ -27,29 +29,20 @@ final class SymfonyActionRequestHandler implements RequestHandlerInterface
         callable $destination,
         SymfonyRequest $symfonyRequest,
         PsrResponseTransformer $psrResponseTransformer,
+        PsrRequestCloner $psrRequestCloner,
     ) {
         $this->destination = $destination;
         $this->psrResponseTransformer = $psrResponseTransformer;
         $this->symfonyRequest = $symfonyRequest;
+        $this->psrRequestCloner = $psrRequestCloner;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $response = ($this->destination)($this->migrate($this->symfonyRequest, $request));
+        $clonedSymfonyRequest = $this->psrRequestCloner->clone($this->symfonyRequest, $request);
+
+        $response = ($this->destination)($clonedSymfonyRequest);
 
         return $this->psrResponseTransformer->toPsrResponse($response);
-    }
-
-    private function migrate(SymfonyRequest $symfonyRequest, ServerRequestInterface $psrRequest): SymfonyRequest
-    {
-        $symfonyRequest->attributes->replace($psrRequest->getAttributes());
-        $symfonyRequest->headers->replace($psrRequest->getHeaders());
-        $symfonyRequest->query->replace($psrRequest->getQueryParams());
-
-        if (\is_array($parsedBody = $psrRequest->getParsedBody())) {
-            $symfonyRequest->request->replace($parsedBody);
-        }
-
-        return $symfonyRequest;
     }
 }

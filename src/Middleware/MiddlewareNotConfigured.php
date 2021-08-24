@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kafkiansky\SymfonyMiddleware;
+namespace Kafkiansky\SymfonyMiddleware\Middleware;
 
 use Psr\Http\Server\MiddlewareInterface;
-use Throwable;
 
 final class MiddlewareNotConfigured extends \Exception
 {

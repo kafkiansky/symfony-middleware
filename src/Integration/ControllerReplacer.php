@@ -7,6 +7,7 @@ namespace Kafkiansky\SymfonyMiddleware\Integration;
 use Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareAction;
 use Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareRunner;
 use Kafkiansky\SymfonyMiddleware\Middleware\SymfonyActionRequestHandler;
+use Kafkiansky\SymfonyMiddleware\Psr\PsrRequestCloner;
 use Kafkiansky\SymfonyMiddleware\Psr\PsrRequestTransformer;
 use Kafkiansky\SymfonyMiddleware\Psr\PsrResponseTransformer;
 use Psr\Http\Server\MiddlewareInterface;
@@ -17,13 +18,16 @@ final class ControllerReplacer
 {
     private PsrRequestTransformer $psrRequestTransformer;
     private PsrResponseTransformer $psrResponseTransformer;
+    private PsrRequestCloner $psrRequestCloner;
 
     public function __construct(
         PsrRequestTransformer $psrRequestTransformer,
         PsrResponseTransformer $psrResponseTransformer,
+        PsrRequestCloner $psrRequestCloner,
     ) {
         $this->psrRequestTransformer = $psrRequestTransformer;
         $this->psrResponseTransformer = $psrResponseTransformer;
+        $this->psrRequestCloner = $psrRequestCloner;
     }
 
     /**
@@ -64,6 +68,7 @@ final class ControllerReplacer
                 },
                 $symfonyRequest,
                 $this->psrResponseTransformer,
+                $this->psrRequestCloner,
             ),
             $this->psrResponseTransformer,
         );
