@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kafkiansky\SymfonyMiddleware\Tests;
 
 use Kafkiansky\SymfonyMiddleware\Middleware\Registry\ServiceLocatorMiddlewareRegistry;
-use Kafkiansky\SymfonyMiddleware\MiddlewareNotConfigured;
+use Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareNotConfigured;
 use Kafkiansky\SymfonyMiddleware\Tests\stubs\ModifyRequestMiddleware;
 use Kafkiansky\SymfonyMiddleware\Tests\stubs\ModifyResponseMiddleware;
 

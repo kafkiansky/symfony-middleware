@@ -6,6 +6,7 @@ namespace Kafkiansky\SymfonyMiddleware\Tests;
 
 use Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareRunner;
 use Kafkiansky\SymfonyMiddleware\Middleware\SymfonyActionRequestHandler;
+use Kafkiansky\SymfonyMiddleware\Psr\DefaultPsrRequestCloner;
 use Kafkiansky\SymfonyMiddleware\Tests\stubs\CopyAttributesFromRequest;
 use Kafkiansky\SymfonyMiddleware\Tests\stubs\EarlyReturnMiddleware;
 use Kafkiansky\SymfonyMiddleware\Tests\stubs\ModifyRequestMiddleware;
@@ -31,7 +32,8 @@ final class MiddlewareRunnerTest extends TestCase
                     return new JsonResponse(['success' => true]);
                 },
                 $symfonyRequest,
-                $this->createPsrResponseTransformer()
+                $this->createPsrResponseTransformer(),
+                new DefaultPsrRequestCloner()
             ),
             $this->createPsrResponseTransformer(),
         );
@@ -59,7 +61,8 @@ final class MiddlewareRunnerTest extends TestCase
                     return new JsonResponse(['success' => true]);
                 },
                 $symfonyRequest,
-                $this->createPsrResponseTransformer()
+                $this->createPsrResponseTransformer(),
+                new DefaultPsrRequestCloner()
             ),
             $this->createPsrResponseTransformer(),
         );
