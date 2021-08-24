@@ -1,5 +1,8 @@
 # PSR-15 middleware now in Symfony.
 
+![test](https://github.com/kafkiansky/symfony-middleware/workflows/test/badge.svg?event=push)
+[![Codecov](https://codecov.io/gh/kafkiansky/symfony-middleware/branch/master/graph/badge.svg)](https://codecov.io/gh/kafkiansky/symfony-middleware)
+
 ### Contents
 
 - [Installation](#installation)
