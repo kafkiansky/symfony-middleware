@@ -6,5 +6,5 @@ README.md          export-ignore
 tests              export-ignore
 phpunit.xml        export-ignore
 psalm.xml          export-ignore
-LICENSE.md         export-ignpore
+LICENSE.md         export-ignore
 .scrutinizer.yml   export-ignore

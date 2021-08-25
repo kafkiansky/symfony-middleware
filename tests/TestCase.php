@@ -37,7 +37,8 @@ abstract class TestCase extends PHPUnitTestCase
     final protected function createPsrRequestTransformer(): PsrRequestTransformer
     {
         return new PsrHttpMessageBridgePsrRequestTransformer(
-            $this->createPsrHttpFactory()
+            $this->createPsrHttpFactory(),
+            new HttpFoundationFactory(),
         );
     }
 
@@ -45,7 +46,7 @@ abstract class TestCase extends PHPUnitTestCase
     {
         return new PsrHttpMessageBridgePsrResponseTransformer(
             $this->createPsrHttpFactory(),
-            new HttpFoundationFactory()
+            new HttpFoundationFactory(),
         );
     }
 

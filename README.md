@@ -34,7 +34,7 @@ Ensure you have added bundle in `config/bundles.php`:
 Kafkiansky\SymfonyMiddleware\SymiddlewareBundle::class => ['all' => true],
 ```
 
-Create the configuration file in `packages/symmidleware.yaml`:
+Create the configuration file in `packages/symiddleware.yaml`:
 
 ```yaml
 symiddleware:

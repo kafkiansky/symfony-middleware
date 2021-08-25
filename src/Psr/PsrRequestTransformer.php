@@ -10,4 +10,5 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 interface PsrRequestTransformer
 {
     public function toPsrRequest(SymfonyRequest $symfonyRequest): ServerRequestInterface;
+    public function fromPsrRequest(ServerRequestInterface $request): SymfonyRequest;
 }
