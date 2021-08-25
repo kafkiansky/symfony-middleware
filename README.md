@@ -16,6 +16,7 @@
 - [Customization](#customization)
 - [Caching](#caching)
 - [Real World Example](#real-world-example)
+- [Middlewares](#middlewares)
 - [Testing](#testing)
 - [License](#license)
 
@@ -337,6 +338,10 @@ final class SomeController
     }
 }
 ```
+
+## Middlewares
+
+[Handle HTTP Basic Auth PSR-15 middleware for Symfony](https://github.com/kafkiansky/symfony-basic-auth-middleware)
 
 ## Testing
 
