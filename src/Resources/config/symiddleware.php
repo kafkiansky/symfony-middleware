@@ -43,6 +43,7 @@ return static function (ContainerConfigurator $configurator): void {
         )
         ->args([
             service(Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface::class),
+            service(Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface::class),
         ]);
 
     $services
