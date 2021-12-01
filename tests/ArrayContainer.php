@@ -6,6 +6,7 @@ namespace Kafkiansky\SymfonyMiddleware\Tests;
 
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Throwable;
 
 final class ArrayContainer implements ContainerInterface
 {
@@ -22,10 +23,43 @@ final class ArrayContainer implements ContainerInterface
             return $this->middlewares[$id];
         }
 
-        throw new class implements NotFoundExceptionInterface {};
+        throw new class implements NotFoundExceptionInterface {
+            public function getMessage()
+            {
+            }
+
+            public function getCode()
+            {
+            }
+
+            public function getFile()
+            {
+            }
+
+            public function getLine()
+            {
+            }
+
+            public function getTrace()
+            {
+            }
+
+            public function getTraceAsString()
+            {
+            }
+
+            public function getPrevious()
+            {
+            }
+
+            public function __toString(): string
+            {
+                return '';
+            }
+        };
     }
 
-    public function has(string $id)
+    public function has(string $id): bool
     {
         return isset($this->middlewares[$id]);
     }
