@@ -10,28 +10,17 @@ use Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareNotConfigured;
 
 final class ServiceLocatorMiddlewareRegistry implements MiddlewareRegistry
 {
-    private ContainerInterface $container;
-
-    /**
-     * @var array<string, array{if?: bool, middlewares: class-string<MiddlewareInterface>[]}>
-     */
-    private array $groups;
-
     /**
      * @psalm-param array<string, array{if?: bool, middlewares: class-string<MiddlewareInterface>[]}> $groups
      */
-    public function __construct(ContainerInterface $container, array $groups)
-    {
-        $this->container = $container;
-        $this->groups = $groups;
+    public function __construct(
+        private readonly ContainerInterface $container,
+        private readonly array $groups,
+    ) {
     }
 
     /**
-     * @param class-string<MiddlewareInterface>|string $middlewareFqcnOrGroup
-     *
-     * @throws MiddlewareNotConfigured
-     *
-     * @return MiddlewareInterface[]
+     * {@inheritdoc}
      */
     public function byName(string $middlewareFqcnOrGroup): array
     {

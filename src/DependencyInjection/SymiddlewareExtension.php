@@ -30,7 +30,7 @@ final class SymiddlewareExtension extends Extension
             return;
         }
 
-        /** @var array{groups: array<string, array{if?: string}>} $config */
+        /** @var array{groups: array<string, array{if?: string}>, global?: string[]} $config */
         $config = $this->processConfiguration($configuration, $configs);
 
         $config['groups']['global'] = [

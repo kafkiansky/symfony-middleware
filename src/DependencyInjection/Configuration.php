@@ -54,12 +54,12 @@ final class Configuration implements ConfigurationInterface
     }
 
     /**
-     * @return \Closure
+     * @return \Closure(string): string
      */
     private function createMiddlewareNormalizer(): callable
     {
-        return function (mixed $middlewareName): string {
-            if (!\is_string($middlewareName) || !\is_a($middlewareName, MiddlewareInterface::class, true)) {
+        return function (string $middlewareName): string {
+            if (!\is_a($middlewareName, MiddlewareInterface::class, true)) {
                 throw new \RuntimeException(
                     vsprintf('Each middleware must implements the "%s" interface, but "%s" doesn\'t.', [
                         MiddlewareInterface::class,

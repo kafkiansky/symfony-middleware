@@ -18,23 +18,17 @@ final class SymfonyActionRequestHandler implements RequestHandlerInterface
      * @var callable(SymfonyRequest): Response
      */
     private $destination;
-    private PsrResponseTransformer $psrResponseTransformer;
-    private SymfonyRequest $symfonyRequest;
-    private PsrRequestCloner $psrRequestCloner;
 
     /**
      * @param callable(SymfonyRequest): Response $destination
      */
     public function __construct(
         callable $destination,
-        SymfonyRequest $symfonyRequest,
-        PsrResponseTransformer $psrResponseTransformer,
-        PsrRequestCloner $psrRequestCloner,
+        private readonly SymfonyRequest $symfonyRequest,
+        private readonly PsrResponseTransformer $psrResponseTransformer,
+        private readonly PsrRequestCloner $psrRequestCloner,
     ) {
         $this->destination = $destination;
-        $this->psrResponseTransformer = $psrResponseTransformer;
-        $this->symfonyRequest = $symfonyRequest;
-        $this->psrRequestCloner = $psrRequestCloner;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
