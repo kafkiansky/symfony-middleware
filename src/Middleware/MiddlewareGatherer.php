@@ -10,11 +10,14 @@ use Psr\Http\Server\MiddlewareInterface;
 
 final class MiddlewareGatherer
 {
-    private MiddlewareRegistry $middlewareRegistry;
+    /**
+     * Array-key where global middleware may be defined.
+     */
+    private const GLOBAL_MIDDLEWARE_GROUP = 'global';
 
-    public function __construct(MiddlewareRegistry $middlewareRegistry)
-    {
-        $this->middlewareRegistry = $middlewareRegistry;
+    public function __construct(
+        private readonly MiddlewareRegistry $middlewareRegistry,
+    ) {
     }
 
     /**
@@ -26,11 +29,11 @@ final class MiddlewareGatherer
      */
     public function gather(array $attributes): array
     {
-        $middlewaresOrGroups = array_unique(array_merge(...array_map(function (Middleware $middleware): array {
-            return $middleware->list;
-        }, $attributes)));
+        $middlewaresOrGroups = array_unique(
+            array_merge([], ...array_map(fn (Middleware $middleware): array => $middleware->list, $attributes)),
+        );
 
-        $middlewares = $this->middlewareRegistry->byName(MiddlewareRegistry::GLOBAL_MIDDLEWARE_GROUP);
+        $middlewares = $this->middlewareRegistry->byName(self::GLOBAL_MIDDLEWARE_GROUP);
 
         foreach ($middlewaresOrGroups as $middlewareOrGroup) {
             $middlewares = array_merge($middlewares, $this->middlewareRegistry->byName($middlewareOrGroup));

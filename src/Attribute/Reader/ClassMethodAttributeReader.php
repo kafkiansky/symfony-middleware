@@ -9,12 +9,7 @@ use Kafkiansky\SymfonyMiddleware\Attribute\Middleware;
 final class ClassMethodAttributeReader implements AttributeReader
 {
     /**
-     * @param object $class
-     * @param string|null $method
-     *
-     * @throws \ReflectionException
-     *
-     * @return Middleware[]
+     * {@inheritdoc}
      */
     public function read(object $class, ?string $method = null): array
     {

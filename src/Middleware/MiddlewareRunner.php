@@ -14,28 +14,18 @@ use Kafkiansky\SymfonyMiddleware\Psr\PsrResponseTransformer;
 final class MiddlewareRunner
 {
     /**
-     * @var MiddlewareInterface[]
-     */
-    private array $middlewares;
-    private RequestHandlerInterface $requestHandler;
-    private PsrResponseTransformer $psrResponseTransformer;
-
-    /**
      * @param MiddlewareInterface[] $middlewares
      */
     public function __construct(
-        array $middlewares,
-        RequestHandlerInterface $requestHandler,
-        PsrResponseTransformer $psrResponseTransformer,
+        private readonly array $middlewares,
+        private readonly RequestHandlerInterface $requestHandler,
+        private readonly PsrResponseTransformer $psrResponseTransformer,
     ) {
-        $this->middlewares = $middlewares;
-        $this->requestHandler = $requestHandler;
-        $this->psrResponseTransformer = $psrResponseTransformer;
     }
 
     public function run(ServerRequestInterface $serverRequest): Response
     {
-        /** @var \Closure(ServerRequestInterface): ResponseInterface */
+        /** @psalm-var \Closure(ServerRequestInterface): ResponseInterface $processor */
         $processor = array_reduce(
             array_reverse($this->middlewares),
             /** @param \Closure(ServerRequestInterface): ResponseInterface $stack */

@@ -12,18 +12,11 @@ use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 
 final class ControllerListener
 {
-    private MiddlewareGatherer $middlewareGatherer;
-    private AttributeReader $reader;
-    private ControllerReplacer $controllerReplacer;
-
     public function __construct(
-        MiddlewareGatherer $middlewareGatherer,
-        AttributeReader $reader,
-        ControllerReplacer $controllerReplacer
+        private readonly MiddlewareGatherer $middlewareGatherer,
+        private readonly AttributeReader $reader,
+        private readonly ControllerReplacer $controllerReplacer,
     ) {
-        $this->middlewareGatherer = $middlewareGatherer;
-        $this->reader = $reader;
-        $this->controllerReplacer = $controllerReplacer;
     }
 
     /**

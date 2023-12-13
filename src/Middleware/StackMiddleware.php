@@ -11,16 +11,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 final class StackMiddleware implements RequestHandlerInterface
 {
     /**
-     * @var \Closure(ServerRequestInterface): ResponseInterface
-     */
-    private \Closure $stack;
-
-    /**
      * @param \Closure(ServerRequestInterface): ResponseInterface $stack
      */
-    public function __construct(\Closure $stack)
-    {
-        $this->stack = $stack;
+    public function __construct(
+        private readonly \Closure $stack,
+    ) {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

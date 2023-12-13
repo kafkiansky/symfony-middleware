@@ -12,15 +12,10 @@ use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 
 final class PsrHttpMessageBridgePsrResponseTransformer implements PsrResponseTransformer
 {
-    private HttpMessageFactoryInterface $httpMessageFactory;
-    private HttpFoundationFactoryInterface $httpFoundationFactory;
-
     public function __construct(
-        HttpMessageFactoryInterface $httpMessageFactory,
-        HttpFoundationFactoryInterface $httpFoundationFactory
+        private readonly HttpMessageFactoryInterface $httpMessageFactory,
+        private readonly HttpFoundationFactoryInterface $httpFoundationFactory
     ) {
-        $this->httpMessageFactory = $httpMessageFactory;
-        $this->httpFoundationFactory = $httpFoundationFactory;
     }
 
     public function toPsrResponse(SymfonyResponse $symfonyResponse): ResponseInterface

@@ -10,11 +10,6 @@ use Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareNotConfigured;
 interface MiddlewareRegistry
 {
     /**
-     * Array-key where global middleware may be defined.
-     */
-    public const GLOBAL_MIDDLEWARE_GROUP = 'global';
-
-    /**
      * @param class-string<MiddlewareInterface>|string $middlewareFqcnOrGroup
      *
      * @throws MiddlewareNotConfigured

@@ -10,13 +10,10 @@ use Psr\Http\Server\MiddlewareInterface;
 
 final class CacheAttributesReader implements AttributeReader
 {
-    private CacheItemPoolInterface $cache;
-    private AttributeReader $delegate;
-
-    public function __construct(CacheItemPoolInterface $cache, AttributeReader $delegate)
-    {
-        $this->cache = $cache;
-        $this->delegate = $delegate;
+    public function __construct(
+        private readonly CacheItemPoolInterface $cache,
+        private readonly AttributeReader $delegate,
+    ) {
     }
 
     /**
@@ -85,7 +82,7 @@ final class CacheAttributesReader implements AttributeReader
 
     private static function cacheKey(object $class, ?string $method = null): string
     {
-        $key = 'symfony.middleware.'.str_replace('\\', '', get_class($class));
+        $key = 'symfony.middleware.'.str_replace('\\', '', $class::class);
 
         if ($method !== null) {
             $key .= '.'.$method;
