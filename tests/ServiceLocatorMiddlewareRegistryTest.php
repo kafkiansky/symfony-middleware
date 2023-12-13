@@ -137,7 +137,9 @@ final class ServiceLocatorMiddlewareRegistryTest extends TestCase
 
     public function testEmptyGroup(): void
     {
-        $registry = new ServiceLocatorMiddlewareRegistry(
+        self::expectException(MiddlewareNotConfigured::class);
+        self::expectExceptionMessage('Middlewares groups cannot empty, but the group "api" is.');
+        new ServiceLocatorMiddlewareRegistry(
             new ArrayContainer([
                 ModifyRequestMiddleware::class => new ModifyRequestMiddleware(),
                 ModifyResponseMiddleware::class => new ModifyResponseMiddleware(),
@@ -147,9 +149,5 @@ final class ServiceLocatorMiddlewareRegistryTest extends TestCase
                 'api' => []
             ]
         );
-
-        self::expectException(MiddlewareNotConfigured::class);
-        self::expectExceptionMessage('Middlewares groups cannot empty, but the group "api" is.');
-        $registry->byName('api');
     }
 }

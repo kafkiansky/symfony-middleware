@@ -8,15 +8,24 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Kafkiansky\SymfonyMiddleware\Middleware\MiddlewareNotConfigured;
 
+/**
+ * @psalm-type MiddlewareGroup = array{if?: bool, middlewares?: list<string|class-string<MiddlewareInterface>>}
+ */
 final class ServiceLocatorMiddlewareRegistry implements MiddlewareRegistry
 {
+    /** @var array<string, class-string<MiddlewareInterface>[]> */
+    private readonly array $enabledMiddlewareGroups;
+
     /**
-     * @psalm-param array<string, array{if?: bool, middlewares: class-string<MiddlewareInterface>[]}> $groups
+     * @psalm-param array<string, MiddlewareGroup> $groups
+     *
+     * @throws MiddlewareNotConfigured
      */
     public function __construct(
         private readonly ContainerInterface $container,
         private readonly array $groups,
     ) {
+        $this->enabledMiddlewareGroups = self::normalizeGroups($this->groups);
     }
 
     /**
@@ -24,7 +33,7 @@ final class ServiceLocatorMiddlewareRegistry implements MiddlewareRegistry
      */
     public function byName(string $middlewareFqcnOrGroup): array
     {
-        if ($this->container->has($middlewareFqcnOrGroup) === false && !isset($this->groups[$middlewareFqcnOrGroup])) {
+        if (!$this->container->has($middlewareFqcnOrGroup) && !isset($this->groups[$middlewareFqcnOrGroup])) {
             throw MiddlewareNotConfigured::forMiddleware($middlewareFqcnOrGroup);
         }
 
@@ -33,18 +42,57 @@ final class ServiceLocatorMiddlewareRegistry implements MiddlewareRegistry
             return [$this->container->get($middlewareFqcnOrGroup)];
         }
 
-        /** @var MiddlewareInterface[] $middlewares */
-        $middlewares = [];
+        return array_map(function (string $middleware): MiddlewareInterface {
+            /** @var MiddlewareInterface */
+            return $this->container->get($middleware);
+        }, $this->enabledMiddlewareGroups[$middlewareFqcnOrGroup] ?? []);
+    }
 
-        if (!isset($this->groups[$middlewareFqcnOrGroup]['if']) || $this->groups[$middlewareFqcnOrGroup]['if']) {
-            $middlewares = array_map(function (string $middlewareFqcn): MiddlewareInterface {
-                /** @var MiddlewareInterface */
-                return $this->container->get($middlewareFqcn);
-            }, $this->groups[$middlewareFqcnOrGroup]['middlewares']
-                ?? throw MiddlewareNotConfigured::becauseGroupIsEmpty($middlewareFqcnOrGroup)
-            );
+    /**
+     * @param array<string, MiddlewareGroup> $groups
+     *
+     * @throws MiddlewareNotConfigured
+     *
+     * @return array<string, class-string<MiddlewareInterface>[]>
+     */
+    private static function normalizeGroups(array $groups): array
+    {
+        $middlewareGroups = [];
+
+        foreach ($groups as $name => $group) {
+            if ($group['if'] ?? true) {
+                $middlewareGroups[$name] = self::normalizeMiddlewares($groups, $group['middlewares'] ?? throw MiddlewareNotConfigured::becauseGroupIsEmpty($name));
+            }
         }
 
-        return $middlewares;
+        return $middlewareGroups;
+    }
+
+    /**
+     * @param array<string, MiddlewareGroup> $groups
+     * @param list<string|class-string<MiddlewareInterface>> $middlewares
+     *
+     * @throws MiddlewareNotConfigured
+     *
+     * @return class-string<MiddlewareInterface>[]
+     */
+    private static function normalizeMiddlewares(array $groups, array $middlewares): array
+    {
+        $groupMiddlewares = [];
+
+        foreach ($middlewares as $middleware) {
+            if (\is_a($middleware, MiddlewareInterface::class, true)) {
+                $groupMiddlewares = array_merge($groupMiddlewares, [$middleware]);
+            } elseif (isset($groups[$middleware]) && ($groups[$middleware]['if'] ?? true)) {
+                $groupMiddlewares = array_merge(
+                    $groupMiddlewares,
+                    self::normalizeMiddlewares($groups, $groups[$middleware]['middlewares'] ?? throw MiddlewareNotConfigured::becauseGroupIsEmpty($middleware)),
+                );
+            } elseif(!isset($groups[$middleware])) {
+                throw MiddlewareNotConfigured::forMiddleware($middleware);
+            }
+        }
+
+        return  $groupMiddlewares;
     }
 }
