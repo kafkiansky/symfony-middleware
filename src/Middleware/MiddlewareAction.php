@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 final class MiddlewareAction
 {
     public function __construct(
-        private MiddlewareRunner $middlewareRunner,
-        private ServerRequestInterface $serverRequest,
+        private readonly MiddlewareRunner $middlewareRunner,
+        private readonly ServerRequestInterface $serverRequest,
     ) {
     }
 

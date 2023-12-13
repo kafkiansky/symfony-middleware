@@ -16,18 +16,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ControllerReplacer
 {
-    private PsrRequestTransformer $psrRequestTransformer;
-    private PsrResponseTransformer $psrResponseTransformer;
-    private PsrRequestCloner $psrRequestCloner;
-
     public function __construct(
-        PsrRequestTransformer $psrRequestTransformer,
-        PsrResponseTransformer $psrResponseTransformer,
-        PsrRequestCloner $psrRequestCloner,
+        private readonly PsrRequestTransformer $psrRequestTransformer,
+        private readonly PsrResponseTransformer $psrResponseTransformer,
+        private readonly PsrRequestCloner $psrRequestCloner,
     ) {
-        $this->psrRequestTransformer = $psrRequestTransformer;
-        $this->psrResponseTransformer = $psrResponseTransformer;
-        $this->psrRequestCloner = $psrRequestCloner;
     }
 
     /**

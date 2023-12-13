@@ -242,6 +242,24 @@ final class SomeController
 }
 ```
 
+Also, you can use nested groups:
+
+```yaml
+symiddleware:
+  global:
+      - App\Controller\SetCorsHeaders
+      - web
+  groups:
+    web:
+      middlewares:
+        - 'App\Middleware\ModifyRequestMiddleware'
+        - debug
+    debug:
+      if: false
+      middlewares:
+        - 'App\Middleware\LogSqlQuery'
+```
+
 Duplicated middlewares will be removed.
 
 ## Customization
